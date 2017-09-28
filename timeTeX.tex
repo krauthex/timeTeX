@@ -1,0 +1,173 @@
+% TeX Machine: LuaLaTeX
+% Author: Fabian Krautgasser
+
+\documentclass[landscape, a4]{article}
+
+% encoding, language and font
+\usepackage[utf8]{luainputenc}
+\usepackage[english, ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{AnonymousPro}  
+\renewcommand*\familydefault{\ttdefault} %% Only if the base font of the document is to be typewriter style
+
+% packages for drawing and the size calculations
+\usepackage{tikz}
+\usepackage{pgfmath}
+
+% setting the page margins to 1cm
+\usepackage[margin=1cm]{geometry}
+
+\begin{document}
+	\pagestyle{empty}
+
+	% The part below is not needed, since all distances are set by hand. It's kept for nostalgic reasons.
+	%%% INITIAL CALCULATIONS %%%
+	
+	% finding the longest day as in the day with the longest name in pts. 
+	\newlength{\tmpday}
+	\pgfmathsetlengthmacro{\longestday}{0pt}
+	\foreach \day in {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"}
+	{
+		\pgfmathparse{width(\day)}
+		\pgfmathsetlength{\tmpday}{\pgfmathresult}
+		\pgfmathmax{\longestday}{\tmpday}
+		\global \let \longestday \pgfmathresult
+	}
+	
+	% adding 1.5cm to the length for the spacing between the days
+	\pgfmathadd{\longestday}{1.5cm}
+	\pgfmathdivide{\pgfmathresult}{1cm}  % convert to cm
+	\global \let \longestday \pgfmathresult
+	
+
+	%%%% Definitions %%%%
+	\newcommand{\mainTitle}{WS 17/18}
+	\newcommand{\timetex}{T \raisebox{-3pt}{\kern -7pt I}\kern -1.5pt M \raisebox{-1pt}{\kern -6pt \small E} \kern -6pt \TeX\ }
+
+
+
+	% Main frame
+	\begin{figure}[h]
+	\centering
+
+	\begin{tikzpicture}[%
+									   % style for classes
+									   class/.style = {draw=none, 
+															fill=white!20, 
+															rectangle, 
+															align=center, 
+															anchor=north, 
+															text width=2.5cm, 
+															minimum height=1.75cm},
+										% style for the classes' location (default: grey, scriptsize text)				 
+										loc/.style = {draw=none, 
+															anchor=south, 
+															text width=2.5cm, 
+															yshift=-0.1cm, 
+															text=gray,
+															align=right,
+															font=\scriptsize},
+								% style for parallel classes; 		
+								para-left/.style = {anchor=north east,
+															text width=1.1cm,
+															xshift=-0.025cm},
+							  para-right/.style = {anchor=north west,
+														   text width=1.1cm,
+														   xshift=0.025cm},
+								para-loc/.style = {text width=1.1cm},
+								timeline/.style = {color=red, very thick},
+							  separator/.style = {color=black, dotted, thin}]
+								
+	
+		%%%% BACKGROUND %%%%
+		\draw [fill=gray!20, draw=none] (-3,2) rectangle (15.5,-15);
+		
+		%%%% TITLE %%%%
+		\node at (.23\textwidth, 1cm) (title) {\textbf{\mainTitle}};
+		
+		%%%%% version with date %%%%
+		\node [anchor=east] at (15,-14.5) (version) {v[\today]};
+		
+		%%%% LOGO %%%%
+		\node[anchor=east] at (15.2, 1.5) (logo) {\timetex};
+				
+		%%%% RED LINES FOR TIME %%%% 
+		\draw [-|, timeline] (-2, -13.25) -- (-2,-14) ; 
+		\draw [-|, timeline] (12.75, 0) -- (14,0) ; 
+		\draw [timeline] (-2,0) -- (-2, -0.5);
+		
+			%%% y ticks %%%
+			\foreach \count in {0,1,2,...,52}
+				{
+				\draw (-1.8, -0.25*\count-0.75) -- (-1.6, -0.25*\count-0.75); 
+				}
+			\foreach \count in {1,2,...,13}
+				{
+				\draw [thick] (-1.8, -1*\count) -- (-1.5, -1*\count);
+				}
+			
+			%%% vertical bars with hourly ticks %%%
+			\foreach \x in {1.5, 4.5, ..., 10.5}
+				{
+				\draw [separator] (\x, -0.75) -- (\x, -14);	
+				\foreach \y in {-1,-2,...,-13}  %ticks
+					{
+					\draw [separator] (\x - 0.1, \y) -- (\x + 0.1, \y);	
+					}
+				}
+			
+			%%% days %%%
+			\foreach [count=\x from 0] \day in {Monday, Tuesday, Wednesday, Thursday, Friday}
+				{
+				\node at (\x*3,0) (\day) {\day};
+				\draw [timeline] (\x*3 -2. ,0) -- (\day.west);
+				}
+		
+		    %%% hours %%%
+		    \foreach [count=\y from 1]  \hour in {8,9,...,20}
+			    {
+			    \node at (-2, -1*\y) (\hour) {\hour};
+			    \draw [timeline] (-2, -1*\y +0.75) -- (\hour.north);
+			    } 
+			
+		% declare math variables
+		\pgfmathsetmacro{\xloc}{0}  % for setting the space between days
+		\pgfmathsetmacro{\sloti}{-2.25} % defining the time slots
+		\pgfmathsetmacro{\slotii}{-4.25} % defining the time slots
+		\pgfmathsetmacro{\slotiii}{-7.25} % defining the time slots
+		\pgfmathsetmacro{\slotiv}{-9.25} % defining the time slots
+		
+		%%%% MONDAY %%%%
+		\node[class, minimum height=1cm] at (\xloc, -2) (gmeet) {Group meeting};
+		\node[loc] at (gmeet.south) {Meeting Room I};		
+		
+		%%%% TUESDAY %%%%
+		\pgfmathsetmacro{\xloc}{\xloc + 3}  
+		\node[class] at (\xloc, \sloti) (dtop1) {Differential- topology I};
+		\node[loc] at (dtop1.south) {Seminar room 2};
+		\node[class] at (\xloc, \slotii) (statphys1) {Theoretical Statistical Physics};
+		\node[loc] at (statphys1.south) {Room XIV};
+		
+		%%%% WEDNESDAY %%%%
+		\pgfmathsetmacro{\xloc}{\xloc + 3}
+		\node[class, minimum height=1.5cm] at (\xloc, -12.5) (yoga1) {Yoga Class};
+		\node[loc] at (yoga1.south) {Gym};
+		
+
+		%%%% THURSDAY %%%%
+		\pgfmathsetmacro{\xloc}{\xloc + 3}
+		\node[class] at (\xloc, \sloti) (dtop2) {Differential- topology};
+		\node[loc] at (dtop2.south) {Seminar room 2};
+		\node[class] at (\xloc, \slotii) (statphys2) {Theoretical Statistical Physics};
+		\node[loc] at (statphys2.south) {Room XIV};
+		\node[class] at (\xloc, \slotiv) (astrobio) {Astrobiology \& Astrobio- physics};
+		\node[loc] at (astrobio.south) {Observatory SR};
+		
+		%%%% FRIDAY %%%%
+		\pgfmathsetmacro{\xloc}{\xloc + 3}
+		\node[class] at (\xloc, \slotiii) (statphystut) {Tensor Calculus};
+	
+	\end{tikzpicture}
+	\end{figure}
+
+\end{document}
