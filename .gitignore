@@ -1,0 +1,9 @@
+# this file lists all directories/files that should be ignored
+
+## for v253
+*.aux
+*.log
+*.pdf
+*.synctex.gz
+
+
