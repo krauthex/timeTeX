@@ -51,32 +51,38 @@
 	\centering
 
 	\begin{tikzpicture}[%
-									   % style for classes
-									   class/.style = {draw=none, 
-															fill=white!20, 
-															rectangle, 
-															align=center, 
-															anchor=north, 
-															text width=2.5cm, 
-															minimum height=1.75cm},
-										% style for the classes' location (default: grey, scriptsize text)				 
-										loc/.style = {draw=none, 
-															anchor=south, 
-															text width=2.5cm, 
-															yshift=-0.1cm, 
-															text=gray,
-															align=right,
-															font=\scriptsize},
-								% style for parallel classes; 		
-								para-left/.style = {anchor=north east,
-															text width=1.1cm,
-															xshift=-0.025cm},
-							  para-right/.style = {anchor=north west,
-														   text width=1.1cm,
-														   xshift=0.025cm},
-								para-loc/.style = {text width=1.1cm},
-								timeline/.style = {color=red, very thick},
-							  separator/.style = {color=black, dotted, thin}]
+						% style for classes
+					    class/.style = {draw=none, 
+		    	   					    fill=white!20, 
+										rectangle, 
+									    align=center, 
+									    anchor=north, 
+									    text width=2.5cm, 
+								   	    minimum height=1.75cm},
+						% style for the classes' location (default: grey, scriptsize text)				 
+						loc/.style = {draw=none, 
+							          anchor=south, 
+								      text width=2.5cm, 
+									  yshift=-0.1cm, 
+								      text=gray,
+								      align=right,
+								      font=\scriptsize},
+						% style for shading
+						shadestyle/.style = {shade,
+									     	 shading=axis,
+											 left color = green!10,
+											 right color = green!40,
+											 shading angle=45},
+						% style for parallel classes; 		
+						para-left/.style = {anchor=north east,
+											text width=1.1cm,
+											xshift=-0.025cm},
+						para-right/.style = {anchor=north west,
+								    		 text width=1.1cm,
+											 xshift=0.025cm},
+						para-loc/.style = {text width=1.1cm},
+						timeline/.style = {color=red, very thick},
+						separator/.style = {color=black, dotted, thin}]
 								
 	
 		%%%% BACKGROUND %%%%
